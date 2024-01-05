@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+
+  grobid:
+    image: grobid/grobid:0.8.0
+    restart: always
+    ports:
+      - 8070:8070
+    ulimits:
+      core:
+        soft: -1
+        hard: -1

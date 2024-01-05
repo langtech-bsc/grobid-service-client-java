@@ -32,6 +32,27 @@ This command will process all the PDF files present in the input directory (file
 
 This command will process all the PDF files present in the input directory (files with extension `.pdf` only) with the `processHeaderDocument` service of GROBID, and write the resulting XML TEI files under the output directory, reusing the file name with a different file extension (`.tei.xml`), using `20` concurrent workers.
 
+## Docker
+Start grobid service
+```bash
+make deploy
+```
+
+
+### Build Docker Image
+To build the Docker image, navigate to the root directory of the project and run the following command:
+
+
+```bash
+docker build -t projecteaina/grobid-client-java:1.0 .
+```
+
+### Run Docker Container
+Once the Docker image is built, you can use the following command to run the container:
+
+```bash
+docker run -d -v path/to/input_pdfs:/app/input -v path/to/output:/app/output projecteaina/grobid-client-java:1.0 -in ./input -out ./output -n 4 -exe processFulltextDocument
+```
 
 ## Benchmarking
 
