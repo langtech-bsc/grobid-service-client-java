@@ -113,6 +113,13 @@ public class Main {
                     i++;
                     continue;
                 }
+                if (currArg.equals("-force")) {
+                    if (pArgs[i] != null) {
+                        gbdArgs.setForce(true);
+                    }
+                    i++;
+                    continue;
+                }
             }
         }
         return result;

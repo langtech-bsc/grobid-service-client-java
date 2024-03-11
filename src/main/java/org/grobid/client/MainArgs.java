@@ -13,6 +13,7 @@ public class MainArgs {
     private String output;
     private String processMethodName = "processFulltextDocument";
     private int nbConcurrency = 10; // default
+    private boolean force = false; //default
 
     // from property file
     private String grobidHost;
@@ -91,5 +92,13 @@ public class MainArgs {
 
     public void setSleepTime(int nb) {
         this.sleepTime = nb;
+    }
+
+    public boolean getForce() {
+        return this.force;
+    }
+
+    public void setForce(boolean force) {
+        this.force = force;
     }
 }

@@ -15,7 +15,7 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import java.nio.file.FileAlreadyExistsException;
 /**
  *
  * @author Patrice
@@ -52,9 +52,15 @@ public class GrobidWorker implements Runnable {
 
     protected void processCommand() {
         try {
+            File outputFile = new File(this.gbdArgs.getOutput() + File.separator + pdfFile.getName().replace(".pdf", ".tei.xml"));
+            
+            if (!this.gbdArgs.getForce() && outputFile.exists()) {
+                throw new FileAlreadyExistsException(outputFile.getPath() + " " + "already exist, skipping... (use -force to reprocess pdf input files)");
+            }
+
             GrobidService grobidService = new GrobidService(this.gbdArgs, this.start, this.end);
             String tei = grobidService.runGrobid(pdfFile);
-            File outputFile = new File(this.gbdArgs.getOutput() + File.separator + pdfFile.getName().replace(".pdf", ".tei.xml"));
+            
             try {
                 FileUtils.writeStringToFile(outputFile, tei, "UTF-8");
             } catch(Exception e) {
@@ -63,10 +69,12 @@ public class GrobidWorker implements Runnable {
             logger.info("\t\t " + pdfFile.getPath() + " processed.");
         } catch (GrobidTimeoutException e) {
             logger.warn("Processing of " + pdfFile.getPath() + " timed out");
+        } catch(FileAlreadyExistsException e) {
+            logger.error(e.getMessage(), e.getCause());
         } catch (RuntimeException e) {
             logger.error("\t\t error occurred while processing " + pdfFile.getPath());
             logger.error(e.getMessage(), e.getCause());
-        } 
+        }
     }
 
 }
