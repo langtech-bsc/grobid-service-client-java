@@ -3,4 +3,4 @@ docker-compose.yml
 Makefile
 Readme.md
 LICENSE
-grobid-client.properties
+**/*.sif

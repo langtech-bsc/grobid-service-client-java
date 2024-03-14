@@ -4,8 +4,6 @@ This Java project can be used to process in an efficient concurrent manner a set
 
 ## Build and run
 
-You need first to install and start the *grobid* service, latest stable version, see the [documentation](http://grobid.readthedocs.io/). It is assumed that the server will run on the address `http://localhost:8070`. You can change the server address by editing the file `grobid-client.properties`.
-
 Build the client:
 
 > mvn clean install
@@ -32,26 +30,51 @@ This command will process all the PDF files present in the input directory (file
 
 This command will process all the PDF files present in the input directory (files with extension `.pdf` only) with the `processHeaderDocument` service of GROBID, and write the resulting XML TEI files under the output directory, reusing the file name with a different file extension (`.tei.xml`), using `20` concurrent workers.
 
+
+
 ## Docker
 Start grobid service
 ```bash
 make deploy
 ```
 
+## Environment Variables
+Optionally, you could change the following environment variables when you run the container with -e flag
 
-### Build Docker Image
+`GROBID_HOST` default to `localhost`
+
+`GROBID_PORT` default to `8070`
+
+`SLEEP_TIME` default to `5000`
+
+
+### Build Client Docker Image (optional)
 To build the Docker image, navigate to the root directory of the project and run the following command:
 
 
 ```bash
-docker build -t projecteaina/grobid-client-java:1.0 .
+make build-docker
 ```
 
 ### Run Docker Container
 Once the Docker image is built, you can use the following command to run the container:
 
 ```bash
-docker run -d -v path/to/input_pdfs:/app/input -v path/to/output:/app/output projecteaina/grobid-client-java:1.0 -in ./input -out ./output -n 4 -exe processFulltextDocument
+docker run -e GROBID_HOST="172.17.0.1" -d -v path/to/input_pdfs:/app/input -v path/to/output:/app/output projecteaina/grobid-client-java:latest -in ./input -out ./output -n 4 -exe processFulltextDocument
+```
+
+### Build Singularity Image
+To build the Singularity image, navigate to the root directory of the project and run the following command:
+
+```bash
+make build-singularity
+```
+
+### Run Singularity Container
+Once the Singularity image is built, you can use the following command to run the container:
+
+```bash
+singularity run --no-home --pwd /app ---bind path/to/input_pdfs:/app/input --bind path/to/output:/app/output grobid-client-java.sif -in ./input -out ./output -n 4 -exe processFulltextDocument
 ```
 
 ## Benchmarking

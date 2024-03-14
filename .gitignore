@@ -36,3 +36,5 @@ build.xml
 maven-build.xml
 release.properties
 
+**/*.sif
+

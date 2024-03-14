@@ -43,23 +43,38 @@ public class Main {
         String grobidHost = null;
         String grobidPort = null;
         int sleepTime = 5000;
-        try(InputStream resourceStream = new FileInputStream("grobid-client.properties")) {
-            props.load(resourceStream);
-            grobidHost = props.getProperty("grobidHost", "localhost");
-            grobidPort = props.getProperty("grobidPort", "8070");
-            String sleepTimeStr = props.getProperty("sleepTime", "5000");
-            try {
-                sleepTime = Integer.parseInt(sleepTimeStr);
-            } catch(Exception e) {
-                System.err.println("sleep time value should be an integer, default value will be used");
-            }
+        // try(InputStream resourceStream = new FileInputStream("grobid-client.properties")) {
+        //     props.load(resourceStream);
+        //     grobidHost = props.getProperty("grobidHost", "localhost");
+        //     grobidPort = props.getProperty("grobidPort", "8070");
+        //     String sleepTimeStr = props.getProperty("sleepTime", "5000");
+
+           
+
+        //     try {
+        //         sleepTime = Integer.parseInt(sleepTimeStr);
+        //     } catch(Exception e) {
+        //         System.err.println("sleep time value should be an integer, default value will be used");
+        //     }
+        // } catch(Exception e) {
+        //     System.err.println("property file not found, default values will be used");
+        // }
+
+
+        grobidHost = System.getenv().getOrDefault("GROBID_HOST", "localhost");
+        grobidPort = System.getenv().getOrDefault("GROBID_PORT", "8070");
+        String sleepTimeStr = System.getenv().getOrDefault("SLEEP_TIME", "5000");
+
+        try {
+            sleepTime = Integer.parseInt(sleepTimeStr);
         } catch(Exception e) {
-            System.err.println("property file not found, default values will be used");
+            System.err.println("sleep time value should be an integer, default value will be used");
         }
 
         gbdArgs.setGrobidHost(grobidHost);
         gbdArgs.setGrobidPort(grobidPort);
         gbdArgs.setSleepTime(sleepTime);
+        
         if (pArgs.length == 0) {
             System.out.println(getHelp());
             result = false;
