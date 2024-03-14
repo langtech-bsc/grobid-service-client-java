@@ -39,7 +39,7 @@ make deploy
 ```
 
 ## Environment Variables
-Optionally, you could change the following environment variables when you run the container with -e flag
+Optionally, you could change the following environment variables when you run the container with (use docker run -e flag)
 
 `GROBID_HOST` default to `localhost`
 
